@@ -1,0 +1,6 @@
+{
+  "name": "Homeschool Learning Hub",
+  "description": "An AI-powered homeschooling platform that generates personalized lessons, offers interactive learning games, and tracks children's progress for parents.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,98 @@
+// Homeschool Learning Hub - Firebase Security Rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper Functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming(request) {
+      return request.resource.data;
+    }
+
+    // ====================================
+    // LESSONS COLLECTION RULES
+    // ====================================
+    match /lessons/{lessonId} {
+      allow read: if true;
+      allow create: if isValidLesson(incoming(request));
+      allow update: if false; // Lessons are immutable / generated.
+      allow delete: if true; // Parents can delete lessons.
+    }
+
+    function isValidLesson(data) {
+      return data.keys().hasAll([
+        'title', 'subject', 'gradeLevel', 'topic', 'summary', 
+        'content', 'createdSeconds', 'gameType', 'gameData', 'quiz'
+      ]) 
+      && data.keys().size() == 10
+      && data.title is string && data.title.size() <= 200
+      && data.subject is string && data.subject.size() <= 100
+      && data.gradeLevel is string && data.gradeLevel.size() <= 100
+      && data.topic is string && data.topic.size() <= 200
+      && data.summary is string && data.summary.size() <= 1000
+      && data.content is string && data.content.size() <= 100000
+      && data.createdSeconds is int
+      && data.gameType is string && (data.gameType == 'narrative_quest' || data.gameType == 'matching_cards' || data.gameType == 'word_unscramble')
+      && data.gameData is map
+      && data.quiz is list;
+    }
+
+    // ====================================
+    // PROFILES COLLECTION RULES
+    // ====================================
+    match /profiles/{profileId} {
+      allow read: if true;
+      allow create: if isValidProfile(incoming(request));
+      allow update: if isValidProfileUpdate(incoming(request), resource.data);
+      allow delete: if true;
+    }
+
+    function isValidProfile(data) {
+      return data.keys().hasAll([
+        'name', 'age', 'grade', 'avatar', 'totalStars', 'unlockedBadges'
+      ])
+      && data.keys().size() == 6
+      && data.name is string && data.name.size() <= 100
+      && data.age is int && data.age >= 0 && data.age <= 20
+      && data.grade is string && data.grade.size() <= 50
+      && data.avatar is string && data.avatar.size() <= 50
+      && data.totalStars is int && data.totalStars >= 0
+      && data.unlockedBadges is list;
+    }
+
+    // ====================================
+    // PROGRESS COLLECTION RULES
+    // ====================================
+    match /progress/{progressId} {
+      allow read: if true;
+      allow create: if isValidProgress(incoming(request));
+      allow update: if false; // Progress records are immutable once logged.
+      allow delete: if true; // Progress can be deleted for COPPA compliance.
+    }
+
+    function isValidProgress(data) {
+      return data.keys().hasAll([
+        'profileId', 'lessonId', 'lessonTitle', 'subject', 'completedAt', 
+        'quizScore', 'totalQuestions', 'starsEarned', 'gamePlayed'
+      ])
+      && (data.keys().size() == 9 || (data.keys().size() == 10 && data.keys().hasAll(['feedback'])))
+      && data.profileId is string && data.profileId.size() <= 100
+      && data.lessonId is string && data.lessonId.size() <= 100
+      && data.lessonTitle is string && data.lessonTitle.size() <= 200
+      && data.subject is string && data.subject.size() <= 100
+      && data.completedAt is string && data.completedAt.size() <= 50
+      && data.quizScore is int && data.quizScore >= 0
+      && data.totalQuestions is int && data.totalQuestions >= 0
+      && data.starsEarned is int && data.starsEarned >= 0
+      && data.gamePlayed is bool;
+    }
+  }
+}

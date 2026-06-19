@@ -1,0 +1,174 @@
+{
+  "entities": {
+    "Lesson": {
+      "title": "Lesson",
+      "description": "An educational lesson generated with AI",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the lesson"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject name"
+        },
+        "gradeLevel": {
+          "type": "string",
+          "description": "Grade level of curriculum"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Topic details"
+        },
+        "summary": {
+          "type": "string",
+          "description": "A brief summary"
+        },
+        "content": {
+          "type": "string",
+          "description": "Markdown formatted course content"
+        },
+        "createdSeconds": {
+          "type": "integer",
+          "description": "Timestamp in seconds when created"
+        },
+        "gameType": {
+          "type": "string",
+          "description": "Game type"
+        },
+        "gameData": {
+          "type": "object",
+          "description": "Game level config payload mapping to types"
+        },
+        "quiz": {
+          "type": "array",
+          "description": "Set of multiple-choice comprehension questions"
+        }
+      },
+      "required": [
+        "title",
+        "subject",
+        "gradeLevel",
+        "topic",
+        "summary",
+        "content",
+        "createdSeconds",
+        "gameType",
+        "gameData",
+        "quiz"
+      ]
+    },
+    "ChildProfile": {
+      "title": "ChildProfile",
+      "description": "A student profile",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Profile name"
+        },
+        "age": {
+          "type": "integer",
+          "description": "Child age"
+        },
+        "grade": {
+          "type": "string",
+          "description": "Current school grade level"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Animal emoji avatar string representation"
+        },
+        "totalStars": {
+          "type": "integer",
+          "description": "Durable gold star balance"
+        },
+        "unlockedBadges": {
+          "type": "array",
+          "description": "List of reward badges achieved by student"
+        }
+      },
+      "required": [
+        "name",
+        "age",
+        "grade",
+        "avatar",
+        "totalStars",
+        "unlockedBadges"
+      ]
+    },
+    "ProgressRecord": {
+      "title": "ProgressRecord",
+      "description": "Lesson and quiz progress records completed by a learner",
+      "type": "object",
+      "properties": {
+        "profileId": {
+          "type": "string",
+          "description": "Profile ID"
+        },
+        "lessonId": {
+          "type": "string",
+          "description": "Lesson ID"
+        },
+        "lessonTitle": {
+          "type": "string",
+          "description": "Lesson Title"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Lesson Subject path"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "ISO String representation of datetime"
+        },
+        "quizScore": {
+          "type": "integer",
+          "description": "Number of correct answers"
+        },
+        "totalQuestions": {
+          "type": "integer",
+          "description": "Total quiz length"
+        },
+        "starsEarned": {
+          "type": "integer",
+          "description": "Sum of gold stars achieved"
+        },
+        "feedback": {
+          "type": "string",
+          "description": "Option feedback string text"
+        },
+        "gamePlayed": {
+          "type": "boolean",
+          "description": "Whether interactive gaming session was finished"
+        }
+      },
+      "required": [
+        "profileId",
+        "lessonId",
+        "lessonTitle",
+        "subject",
+        "completedAt",
+        "quizScore",
+        "totalQuestions",
+        "starsEarned",
+        "gamePlayed"
+      ]
+    }
+  },
+  "firestore": {
+    "lessons": {
+      "schema": "Lesson",
+      "description": "Educational lessons collection available mapping to grades"
+    },
+    "profiles": {
+      "schema": "ChildProfile",
+      "description": "All student learner profiles tracking scores"
+    },
+    "progress": {
+      "schema": "ProgressRecord",
+      "description": "Activity logs detailing completed lessons"
+    }
+  }
+}
