@@ -6,7 +6,7 @@ import { getAuth } from "firebase/auth";
 const firebaseConfig = {
   projectId: "gen-lang-client-0696819076",
   appId: "1:1089585182714:web:f48a203b0b08d55dde1643",
-  apiKey: "AIzaSyD5azfy0ckqA1dnUkK9bj6MLaN6xd_xzDM",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "gen-lang-client-0696819076.firebaseapp.com",
   storageBucket: "gen-lang-client-0696819076.firebasestorage.app",
   messagingSenderId: "1089585182714"
